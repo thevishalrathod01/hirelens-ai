@@ -1,7 +1,9 @@
 import axios from "axios"
 
+const BASE_URL = "https://hirelens-ai-backend.onrender.com"
+
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/auth",
+  baseURL: `${BASE_URL}/api/auth`,
 })
 
 const getAuthHeader = () => {
@@ -16,24 +18,26 @@ const getAuthHeader = () => {
 
 export const registerUser = async (userData) => {
   const response = await API.post("/register", userData)
+
   return response.data
 }
 
 export const loginUser = async (userData) => {
   const response = await API.post("/login", userData)
+
   return response.data
 }
 
 export const uploadResume = async (formData) => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+
   const response = await axios.post(
-    "http://localhost:5000/api/resume/upload",
+    `${BASE_URL}/api/resume/upload`,
     formData,
     {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${
-          JSON.parse(localStorage.getItem("userInfo"))?.token
-        }`,
+        Authorization: `Bearer ${userInfo?.token}`,
       },
     }
   )
@@ -43,7 +47,7 @@ export const uploadResume = async (formData) => {
 
 export const generateInterview = async (role) => {
   const response = await axios.post(
-    "http://localhost:5000/api/interview/generate",
+    `${BASE_URL}/api/interview/generate`,
     { role },
     getAuthHeader()
   )
@@ -53,7 +57,7 @@ export const generateInterview = async (role) => {
 
 export const evaluateInterview = async (data) => {
   const response = await axios.post(
-    "http://localhost:5000/api/interview/evaluate",
+    `${BASE_URL}/api/interview/evaluate`,
     data,
     getAuthHeader()
   )
@@ -63,7 +67,7 @@ export const evaluateInterview = async (data) => {
 
 export const getInterviewHistory = async () => {
   const response = await axios.get(
-    "http://localhost:5000/api/interview/history",
+    `${BASE_URL}/api/interview/history`,
     getAuthHeader()
   )
 
@@ -72,7 +76,7 @@ export const getInterviewHistory = async () => {
 
 export const getResumeHistory = async () => {
   const response = await axios.get(
-    "http://localhost:5000/api/resume/history",
+    `${BASE_URL}/api/resume/history`,
     getAuthHeader()
   )
 
